@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"errors"
-	"fmt"
 	"regexp"
 	"time"
 )
@@ -28,7 +27,6 @@ var Patterns = map[string]string{
 
 func checkIsDateValid(month, year int) (bool, error) {
 	currentYear, currentMonth, _ := time.Now().Date()
-	fmt.Println(int(currentMonth), currentYear)
 
 	if year < currentYear || (year == currentYear && month < int(currentMonth)) {
 		return false, errors.New("the card is expired")
@@ -41,13 +39,12 @@ func checkIsDateValid(month, year int) (bool, error) {
 }
 
 func checkCardForPattern(card string) error {
-	for name, pattern := range Patterns {
+	for _, pattern := range Patterns {
 		matched, err := regexp.MatchString(pattern, card)
 		if err != nil {
 			return errors.New("error checking regexp")
 		}
 		if matched {
-			fmt.Println(name)
 			return nil
 		}
 	}

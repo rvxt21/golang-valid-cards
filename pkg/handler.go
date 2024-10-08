@@ -16,29 +16,11 @@ func PostAndValidateCards(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if creditCardReqBody.CardNumber == "" {
-		respondWithError(w, http.StatusBadRequest, "002", "Card number is required")
+	ok, statusCode, code, message := isValidCardNumber(creditCardReqBody)
+	if !ok {
+		respondWithError(w, statusCode, code, message)
 		return
 	}
-
-	err = checkCardForPattern(creditCardReqBody.CardNumber)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "003", err.Error())
-		return
-	}
-
-	_, err = luhnAlgorithmCheck(creditCardReqBody.CardNumber)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "004", err.Error())
-		return
-	}
-
-	_, err = checkIsDateValid(creditCardReqBody.ExpirationMonth, creditCardReqBody.ExpirationYear)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "005", err.Error())
-		return
-	}
-
 	respondWithSuccess(w, true)
 }
 
