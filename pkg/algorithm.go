@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"errors"
 	"strings"
 )
 
@@ -24,5 +25,8 @@ func luhnAlgorithmCheck(cardNumber string) (bool, error) {
 		isSecondDigit = !isSecondDigit
 	}
 
-	return sum%10 == 0, nil
+	if sum%10 != 0 {
+		return false, errors.New("the card number is incorrect")
+	}
+	return true, nil
 }
