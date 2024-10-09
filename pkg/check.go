@@ -3,28 +3,21 @@ package pkg
 import (
 	"errors"
 	"regexp"
+	"strings"
 	"time"
 )
 
 // Patterns is a map that associates common credit card issuers with their corresponding regular expressions (regex).
 // Each entry in the map contains a key (the card issuer's name) and a value (a regex pattern).
 var Patterns = map[string]string{
-	"Amex":          `^3[47][0-9]{13}$`,
-	"BCGlobal":      `^(6541|6556)[0-9]{12}$`,
-	"Carte Blanche": `^389[0-9]{11}$`,
-	"Diners Club":   `^3(?:0[0-5]|[68][0-9])[0-9]{11}$`,
-	"Discover":      `^(65[4-9][0-9]{13}|64[4-9][0-9]{13}|6011[0-9]{12}|622(?:12[6-9]|1[3-9][0-9]|[2-8][0-9]{0,9}|9[01][0-9]|92[0-5])[0-9]{10})$`,
-	"Insta Payment": `^63[7-9][0-9]{13}$`,
-	"JCB":           `^(?:2131|1800|35\d{3})\d{11}$`,
-	"KoreanLocal":   `^9[0-9]{15}$`,
-	"Laser":         `^(6304|6706|6709|6771)[0-9]{12,15}$`,
-	"Maestro":       `^(5018|5020|5038|5893|6304|6759|6761|6762|6763)[0-9]{8,15}$`,
-	"Mastercard":    `^(5[1-5][0-9]{14}|2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12}))$`,
-	"Solo":          `^(6334|6767)[0-9]{12,15}$`,
-	"Switch":        `^(4903|4905|4911|4936|6333|6759)[0-9]{12,15}$`,
-	"Union Pay":     `^(62[0-9]{14,17})$`,
-	"Visa":          `^4[0-9]{12}(?:[0-9]{3})?$`,
-	"Visa Master":   `^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$`,
+	"Amex":        `^3[47][0-9]{13}$`,
+	"Diners Club": `^3(?:0[0-5]|[68][0-9])[0-9]{11}$`,
+	"Discover":    `^(6011[0-9]{12}|64[4-9][0-9]{12,15}|65[0-9]{14,17})$$`,
+	"JCB":         `^35(2[8-9]|[3-8][0-9])[0-9]{11,14}$`,
+	"Maestro":     `^(5[0-9]{2}|6013|62|63|67)[0-9]{10,15}$`,
+	"Mastercard":  `^(5[1-5][0-9]{14}|2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12,15})|5[1-5][0-9]{14})$`,
+	"Visa":        `^4[0-9]{12}(?:[0-9]{3})?$`,
+	"Visa Master": `^(4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$`,
 }
 
 // checkIsDateValid validates the provided credit card information about expiration month and expiration year.
@@ -54,6 +47,7 @@ func checkIsDateValid(month, year int) (bool, error) {
 // Returns:
 // - A descriptive error message for the validation error.
 func checkCardForPattern(cardNumber string) error {
+	cardNumber = strings.ReplaceAll(cardNumber, " ", "")
 	for _, pattern := range Patterns {
 		matched, err := regexp.MatchString(pattern, cardNumber)
 		if err != nil {
