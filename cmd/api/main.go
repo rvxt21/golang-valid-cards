@@ -10,7 +10,7 @@ import (
 
 func main() {
 	router := mux.NewRouter()
-	router.HandleFunc("/", pkg.PostAndValidateCards).Methods("POST")
+	router.HandleFunc("/validate", pkg.PostAndValidateCards).Methods("POST")
 
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {

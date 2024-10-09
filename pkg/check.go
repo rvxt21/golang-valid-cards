@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+// Patterns is a map that associates common credit card issuers with their corresponding regular expressions (regex).
+// Each entry in the map contains a key (the card issuer's name) and a value (a regex pattern).
 var Patterns = map[string]string{
 	"Amex":          `^3[47][0-9]{13}$`,
 	"BCGlobal":      `^(6541|6556)[0-9]{12}$`,
@@ -25,6 +27,14 @@ var Patterns = map[string]string{
 	"Visa Master":   `^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$`,
 }
 
+// checkIsDateValid validates the provided credit card information about expiration month and expiration year.
+// It verifies that the expiration date is valid.
+// Parameters:
+// - month, year: A int representing expiration month and expiration year.
+// Returns:
+// - A boolean indicating whether the card number and expiration date are valid.
+// - A descriptive error message for the validation error.
+
 func checkIsDateValid(month, year int) (bool, error) {
 	currentYear, currentMonth, _ := time.Now().Date()
 
@@ -38,9 +48,14 @@ func checkIsDateValid(month, year int) (bool, error) {
 
 }
 
-func checkCardForPattern(card string) error {
+// checkCardForPattern validates the provided card number for matching patterns.
+// Parameters:
+// - cardNumber: A string representing the credit card number.
+// Returns:
+// - A descriptive error message for the validation error.
+func checkCardForPattern(cardNumber string) error {
 	for _, pattern := range Patterns {
-		matched, err := regexp.MatchString(pattern, card)
+		matched, err := regexp.MatchString(pattern, cardNumber)
 		if err != nil {
 			return errors.New("error checking regexp")
 		}

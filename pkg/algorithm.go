@@ -5,6 +5,15 @@ import (
 	"strings"
 )
 
+// // luhnAlgorithmCheck checks if the provided card number is valid based on the Luhn algorithm.
+// The function iterates over the card number from right to left, doubling every second digit.
+// If the doubled digit is greater than 9, 9 is subtracted from it. The resulting sum is then
+// calculated, and if the sum modulo 10 is equal to 0, the card number is valid.
+// Parameters:
+// - cardNumber: A string representing the credit card number.
+// Returns:
+// - bool: true if the card number is valid according to the Luhn algorithm, false otherwise.
+// - error: An error if the card number is invalid
 func luhnAlgorithmCheck(cardNumber string) (bool, error) {
 	cardNumber = strings.ReplaceAll(cardNumber, " ", "")
 	sum := 0

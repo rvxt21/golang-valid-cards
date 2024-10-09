@@ -6,6 +6,10 @@ import (
 	"net/http"
 )
 
+// PostAndValidateCards handles the HTTP POST request for validating a credit card.
+// It reads the request body to extract the card information, validates it using the isValidCardNumber function,
+// and sends a response indicating whether the card is valid or not.
+// If the request body is malformed, or the card is invalid, it responds with an appropriate error.
 func PostAndValidateCards(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var creditCardReqBody creditCardRequestBody
@@ -24,6 +28,8 @@ func PostAndValidateCards(w http.ResponseWriter, r *http.Request) {
 	respondWithSuccess(w, true)
 }
 
+// respondWithError sends an error response in JSON format with a specified status code, error code, and message.
+// It sets the "Valid" field to false and populates the "Error" field with the provided error details.
 func respondWithError(w http.ResponseWriter, statusCode int, code, message string) {
 	response := Response{
 		Valid: false,
@@ -42,6 +48,8 @@ func respondWithError(w http.ResponseWriter, statusCode int, code, message strin
 
 }
 
+// respondWithSuccess sends a success response in JSON format with a valid status.
+// The "Valid" field indicates if the card passed validation, and the "Error" field is nil.
 func respondWithSuccess(w http.ResponseWriter, isValid bool) {
 	response := Response{
 		Valid: isValid,
