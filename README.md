@@ -31,9 +31,9 @@ The request should be sent in JSON format:
 
 ```json
 {
-  "card_number": "4111111111111111",
-  "expiration_year": 2028,
-  "expiration_month": 11
+  "cardnumber": "4111111111111111",
+  "expirationyear": "2028",
+  "expirationmonth": "11"
 }
 ```
 
