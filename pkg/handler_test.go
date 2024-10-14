@@ -11,17 +11,17 @@ import (
 func TestPostAndValidateCards(t *testing.T) {
 	tests := []struct {
 		name           string
-		requestBody    creditCardRequestBody
+		requestBody    CreditCard
 		expectedStatus int
 		expectedValid  bool
 		expectedError  *Error
 	}{
 		{
 			name: "Valid card",
-			requestBody: creditCardRequestBody{
+			requestBody: CreditCard{
 				CardNumber:      "5512789002271854",
-				ExpirationMonth: 12,
-				ExpirationYear:  2025,
+				ExpirationMonth: "12",
+				ExpirationYear:  "2025",
 			},
 			expectedStatus: http.StatusOK,
 			expectedValid:  true,
@@ -29,10 +29,10 @@ func TestPostAndValidateCards(t *testing.T) {
 		},
 		{
 			name: "Invalid card numer",
-			requestBody: creditCardRequestBody{
+			requestBody: CreditCard{
 				CardNumber:      "4111111111111112",
-				ExpirationMonth: 12,
-				ExpirationYear:  2025,
+				ExpirationMonth: "12",
+				ExpirationYear:  "2025",
 			},
 			expectedStatus: http.StatusBadRequest,
 			expectedValid:  false,
@@ -40,14 +40,14 @@ func TestPostAndValidateCards(t *testing.T) {
 		},
 		{
 			name: "Expired card",
-			requestBody: creditCardRequestBody{
+			requestBody: CreditCard{
 				CardNumber:      "341073406242763",
-				ExpirationMonth: 10,
-				ExpirationYear:  2022,
+				ExpirationMonth: "10",
+				ExpirationYear:  "2022",
 			},
 			expectedStatus: http.StatusBadRequest,
 			expectedValid:  false,
-			expectedError:  &Error{"005", "the card is expired"},
+			expectedError:  &Error{"005", "credit card has expired"},
 		},
 	}
 

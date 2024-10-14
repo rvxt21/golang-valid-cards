@@ -12,7 +12,7 @@ import (
 // If the request body is malformed, or the card is invalid, it responds with an appropriate error.
 func PostAndValidateCards(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	var creditCardReqBody creditCardRequestBody
+	var creditCardReqBody CreditCard
 
 	err := json.NewDecoder(r.Body).Decode(&creditCardReqBody)
 	if err != nil {
@@ -20,7 +20,7 @@ func PostAndValidateCards(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok, statusCode, code, message := isValidCardNumber(creditCardReqBody)
+	ok, statusCode, code, message := creditCardReqBody.isValid()
 	if !ok {
 		respondWithError(w, statusCode, code, message)
 		return
